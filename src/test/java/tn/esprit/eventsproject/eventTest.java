@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class event_test {
+public class eventTest {
 
     @Mock
     private EventRepository eventRepository;
@@ -40,7 +40,7 @@ public class event_test {
     private Logistics logistics;
 
     @BeforeEach
-    public void setUp() {
+     void setUp() {
         participant = new Participant();
         participant.setIdPart(1);
         participant.setNom("haythem");
@@ -62,7 +62,7 @@ public class event_test {
     }
 
     @Test
-    public void testAddParticipant() {
+     void testAddParticipant() {
         when(participantRepository.save(any(Participant.class))).thenReturn(participant);
 
         Participant savedParticipant = eventServices.addParticipant(participant);
@@ -73,7 +73,7 @@ public class event_test {
     }
 
     @Test
-    public void testAddAffectEvenParticipantById() {
+     void testAddAffectEvenParticipantById() {
         when(participantRepository.findById(1)).thenReturn(Optional.of(participant));
         when(eventRepository.save(any(Event.class))).thenReturn(event);
 
@@ -86,7 +86,7 @@ public class event_test {
     }
 
     @Test
-    public void testAddAffectEvenParticipant() {
+     void testAddAffectEvenParticipant() {
         Participant anotherParticipant = new Participant();
         anotherParticipant.setIdPart(2);
         Set<Participant> participants = new HashSet<>(Arrays.asList(participant, anotherParticipant));
@@ -103,7 +103,7 @@ public class event_test {
     }
 
     @Test
-    public void testAddAffectLog() {
+     void testAddAffectLog() {
         when(eventRepository.findByDescription("Test Event")).thenReturn(event);
         when(logisticsRepository.save(any(Logistics.class))).thenReturn(logistics);
 
@@ -116,7 +116,7 @@ public class event_test {
     }
 
     @Test
-    public void testGetLogisticsDates() {
+     void testGetLogisticsDates() {
         when(eventRepository.findByDateDebutBetween(any(LocalDate.class), any(LocalDate.class)))
                 .thenReturn(Collections.singletonList(event));
         event.setLogistics(new HashSet<>(Collections.singletonList(logistics)));
@@ -130,9 +130,9 @@ public class event_test {
     }
 
     @Test
-    public void testCalculCout() {
+     void testCalculCout() {
         when(eventRepository.findByParticipants_NomAndParticipants_PrenomAndParticipants_Tache(
-                eq("Tounsi"), eq("Ahmed"), eq(Tache.ORGANISATEUR)))
+                "Tounsi", "Ahmed", Tache.ORGANISATEUR))
                 .thenReturn(Collections.singletonList(event));
 
         event.setLogistics(new HashSet<>(Collections.singletonList(logistics)));
@@ -142,7 +142,7 @@ public class event_test {
         assertEquals(200.0f, event.getCout());
         verify(eventRepository, times(1))
                 .findByParticipants_NomAndParticipants_PrenomAndParticipants_Tache(
-                        eq("Tounsi"), eq("Ahmed"), eq(Tache.ORGANISATEUR));
+                        "Tounsi", "Ahmed", Tache.ORGANISATEUR);
         verify(eventRepository, times(1)).save(event);
     }
 }
